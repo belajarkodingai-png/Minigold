@@ -1,208 +1,135 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MINIGOLD - Login & Dashboard</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mini Gold Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Google Fonts: Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div class="login-container" id="login-container">
-        <div class="login-box">
-            <h2>Login MINIGOLD</h2>
-            <form id="login-form">
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" placeholder="Masukkan username" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" placeholder="Masukkan password" required>
-                </div>
-                <button type="submit" class="cta-button">Login</button>
-            </form>
+  <div class="dashboard">
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">Mini<span class="gold">Gold</span></div>
+        <button id="toggleSidebar" aria-label="Toggle sidebar">&#9776;</button>
+      </div>
+      <ul class="nav-list">
+        <li class="nav-item active">
+          <span class="icon">🏠</span>
+          <span class="text">Dashboard</span>
+        </li>
+        <li class="nav-item">
+          <span class="icon">💎</span>
+          <span class="text">Produk</span>
+        </li>
+        <li class="nav-item">
+          <span class="icon">📦</span>
+          <span class="text">Pesanan</span>
+        </li>
+        <li class="nav-item">
+          <span class="icon">👥</span>
+          <span class="text">Pelanggan</span>
+        </li>
+        <li class="nav-item">
+          <span class="icon">📊</span>
+          <span class="text">Laporan</span>
+        </li>
+        <li class="nav-item">
+          <span class="icon">📉</span>
+          <span class="text">Grafik Harga</span>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Main content -->
+    <div class="main-content">
+      <!-- Header -->
+      <header class="header">
+        <div class="app-name">MiniGold Dashboard</div>
+        <div class="header-right">
+          <div class="notification" id="notification">
+            🔔<span class="badge" id="notifBadge">3</span>
+          </div>
+          <div class="profile" id="profile">
+            <img src="https://i.pravatar.cc/40" alt="avatar" class="avatar" />
+            <div class="profile-dropdown" id="profileDropdown">
+              <ul>
+                <li><a href="#">Profile</a></li>
+                <li><a href="#">Settings</a></li>
+                <li><a href="#">Logout</a></li>
+              </ul>
+            </div>
+          </div>
+          <button id="darkModeToggle" aria-label="Toggle dark mode" class="dark-mode-toggle">☀️</button>
         </div>
+      </header>
+
+      <!-- Dashboard Grid -->
+      <section class="dashboard-grid">
+        <!-- Summary Cards -->
+        <div class="card summary-card" id="totalSalesCard">
+          <h3>Total Penjualan</h3>
+          <p class="count-up" id="totalSales">0</p>
+        </div>
+        <div class="card summary-card" id="productsSoldCard">
+          <h3>Produk Terjual</h3>
+          <p class="count-up" id="productsSold">0</p>
+        </div>
+        <div class="card summary-card" id="ordersCountCard">
+          <h3>Jumlah Pesanan</h3>
+          <p class="count-up" id="ordersCount">0</p>
+        </div>
+        <div class="card summary-card" id="customersCountCard">
+          <h3>Jumlah Pelanggan</h3>
+          <p class="count-up" id="customersCount">0</p>
+        </div>
+
+        <!-- Sales Chart -->
+        <div class="card chart-card">
+          <h3>Grafik Penjualan</h3>
+          <canvas id="salesChart"></canvas>
+          <div class="filter-buttons">
+            <button class="filter-btn active" data-range="daily">Harian</button>
+            <button class="filter-btn" data-range="weekly">Mingguan</button>
+            <button class="filter-btn" data-range="monthly">Bulanan</button>
+          </div>
+        </div>
+
+        <!-- Product Table -->
+        <div class="card table-card" id="productTableCard">
+          <h3>Daftar Produk Minigold</h3>
+          <div class="table-actions">
+            <input type="text" id="productSearch" placeholder="Cari produk..." />
+            <button id="addProductBtn">+ Tambah Produk</button>
+          </div>
+          <table id="productTable">
+            <thead>
+              <tr>
+                <th>Thumbnail</th>
+                <th>Nama Produk</th>
+                <th>Stok</th>
+                <th>Harga</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Rows akan dirender dengan JS -->
+            </tbody>
+          </table>
+          <div id="pagination"></div>
+        </div>
+        
+        <!-- Placeholder untuk bagian lain seperti Pesanan, Pelanggan, Laporan, Grafik Harga -->
+        <!-- Bisa dibuat tab atau section terpisah sesuai kebutuhan -->
+      </section>
     </div>
-    <div class="dashboard-container" id="dashboard-container">
-        <div class="sidebar">
-            <h2>MINIGOLD</h2>
-            <a href="#dashboard">Dashboard</a>
-            <a href="#buy">Beli Emas</a>
-            <a href="#sell">Jual Emas</a>
-            <a href="#withdraw">Tarik Fisik</a>
-            <a href="#transfer">Transfer Emas</a>
-            <a href="#" id="logout">Logout</a>
-        </div>
-        <div class="main-content" id="main-content">
-            <div class="header">
-                <h1>Dashboard MINIGOLD</h1>
-                <p>Selamat datang di platform investasi emas Anda!</p>
-            </div>
-            <div class="dashboard-section">
-                <h2>Saldo Emas Anda</h2>
-                <div class="card">
-                    <p>Saldo: <strong>5.25 gram</strong></p>
-                    <p>Nilai: <strong>IDR 9,754,500</strong></p>
-                </div>
-            </div>
-            <div class="dashboard-section">
-                <h2>Harga Emas Hari Ini</h2>
-                <div class="card price-box">
-                    <div>
-                        <h3>Harga Beli</h3>
-                        <p>IDR 1,858,000 /gram</p>
-                        <p class="price-change">+9,000</p>
-                    </div>
-                    <div>
-                        <h3>Harga Jual</h3>
-                        <p>IDR 1,814,000 /gram</p>
-                        <p class="price-change">+9,000</p>
-                    </div>
-                </div>
-            </div>
-            <div class="dashboard-section">
-                <h2>Kalkulator Investasi</h2>
-                <div class="card calculator">
-                    <form id="calc-form">
-                        <div class="form-group">
-                            <label for="calc-amount">Jumlah Emas (gram)</label>
-                            <input type="number" id="calc-amount" step="0.01" min="0.01" placeholder="Masukkan jumlah emas">
-                        </div>
-                        <button type="submit" class="cta-button">Hitung Nilai</button>
-                    </form>
-                    <p id="calc-result"></p>
-                </div>
-            </div>
-            <div class="dashboard-section">
-                <h2>Beli Emas</h2>
-                <div class="card">
-                    <form id="buy-form">
-                        <div class="form-group">
-                            <label for="buy-amount">Jumlah (gram)</label>
-                            <input type="number" id="buy-amount" step="0.01" min="0.01" placeholder="Masukkan jumlah emas">
-                        </div>
-                        <button type="submit" class="cta-button">Beli Sekarang</button>
-                    </form>
-                </div>
-            </div>
-            <div class="dashboard-section">
-                <h2>Tren Harga Emas</h2>
-                <div class="card">
-                    ```chartjs
-                    {
-                        "type": "line",
-                        "data": {
-                            "labels": ["24 Aug", "25 Aug", "26 Aug", "27 Aug", "28 Aug", "29 Aug", "30 Aug"],
-                            "datasets": [{
-                                "label": "Harga Beli (IDR)",
-                                "data": [1800000, 1810000, 1820000, 1830000, 1840000, 1850000, 1858000],
-                                "borderColor": "#d4af37",
-                                "backgroundColor": "rgba(212, 175, 55, 0.2)",
-                                "fill": true
-                            }, {
-                                "label": "Harga Jual (IDR)",
-                                "data": [1750000, 1760000, 1770000, 1780000, 1790000, 1800000, 1814000],
-                                "borderColor": "#b8972e",
-                                "backgroundColor": "rgba(184, 151, 46, 0.2)",
-                                "fill": true
-                            }]
-                        },
-                        "options": {
-                            "responsive": true,
-                            "scales": {
-                                "y": {
-                                    "beginAtZero": false
-                                }
-                            }
-                        }
-                    }
-                    ```
-                </div>
-            </div>
-            <div class="dashboard-section">
-                <h2>Distribusi Transaksi</h2>
-                <div class="card">
-                    ```chartjs
-                    {
-                        "type": "pie",
-                        "data": {
-                            "labels": ["Beli", "Jual", "Transfer", "Tarik Fisik"],
-                            "datasets": [{
-                                "label": "Jenis Transaksi",
-                                "data": [3, 1, 1, 1],
-                                "backgroundColor": [
-                                    "#d4af37",
-                                    "#b8972e",
-                                    "#e6c876",
-                                    "#8b6f1e"
-                                ],
-                                "borderColor": "#1a1a1a",
-                                "borderWidth": 1
-                            }]
-                        },
-                        "options": {
-                            "responsive": true,
-                            "plugins": {
-                                "legend": {
-                                    "position": "top"
-                                }
-                            }
-                        }
-                    }
-                    ```
-                </div>
-            </div>
-            <div class="dashboard-section">
-                <h2>Riwayat Transaksi</h2>
-                <div class="card">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Tanggal</th>
-                                <th>Jenis</th>
-                                <th>Jumlah</th>
-                                <th>Nilai</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>30 Aug 2025</td>
-                                <td>Beli</td>
-                                <td>1.00 gram</td>
-                                <td>IDR 1,858,000</td>
-                            </tr>
-                            <tr>
-                                <td>29 Aug 2025</td>
-                                <td>Jual</td>
-                                <td>0.50 gram</td>
-                                <td>IDR 907,000</td>
-                            </tr>
-                            <tr>
-                                <td>28 Aug 2025</td>
-                                <td>Beli</td>
-                                <td>2.00 gram</td>
-                                <td>IDR 3,660,000</td>
-                            </tr>
-                            <tr>
-                                <td>27 Aug 2025</td>
-                                <td>Transfer</td>
-                                <td>0.25 gram</td>
-                                <td>IDR 452,500</td>
-                            </tr>
-                            <tr>
-                                <td>26 Aug 2025</td>
-                                <td>Tarik Fisik</td>
-                                <td>1.00 gram</td>
-                                <td>IDR 1,830,000</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-    <script src="script.js"></script>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
